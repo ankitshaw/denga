@@ -1,2 +1,4 @@
 setuptools
 wheel
+pandas
+nltk
