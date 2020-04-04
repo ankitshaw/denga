@@ -36,12 +36,13 @@ def getWordsOfInterest(tags):
 
 def nlp_test():
 	# df = pd.read_csv(filePath,sep='\t',header= None, error_bad_lines=False)  #need to handle different file formats.
-	data = ["i want to swim"] # 'I will work from home today'
+	data = ["I want to swim"] # 'I will work from home today'
 	df= pd.DataFrame(data, columns=['Sentences'])
 	datasetList = df.iloc[:,0].values.tolist() #first column of data frame i.e. all sentences
 
 	# get list of synonyms for each word in filtered sentence
 	for sentence in datasetList:
+		print("Original Sentence: ", sentence)
 		sentenceFiltered = removeStopWords(sentence)
 		print("filtered sentence: ", sentenceFiltered)
 		tag = getPosTag(sentenceFiltered)
@@ -55,7 +56,7 @@ def nlp_test():
 		print(synonym_dict)
 
 		print("no of woi: ", len(woi))
-		no_of_words_to_be_replaced = 2 #flag to set how many words need to be replaced
+		no_of_words_to_be_replaced = len(woi) #flag to set how many words need to be replaced
 		generated_sentences=[]
 		if no_of_words_to_be_replaced <=len(woi):
 			for i in range(0,no_of_words_to_be_replaced):
@@ -65,7 +66,7 @@ def nlp_test():
 					# here keep a check based on similarity threshold, only if it passes: append to final list
 					generated_sentences.append(generated_sentence)
 		generated_sentences=set(generated_sentences)
-		print(generated_sentences)
+		print(sep="\n",*generated_sentences)
 
 nlp_test()
 
