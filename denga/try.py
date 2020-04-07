@@ -10,13 +10,14 @@ def removeStopWords(sentence):
     return filtered_sentence
 
 nlp = spacy.load('en_core_web_lg')
-a = "i want to swim"
+a = "i ducked"
 a1=nlp(removeStopWords(a))
 print(a1)
-b = "i neediness to swim"
+b = "the duck is yellow"
 b1=nlp(removeStopWords(b))
 print(b1)
 print(nlp(a).similarity(nlp(b)))
+print(a1.similarity(b1))
 
 
 
