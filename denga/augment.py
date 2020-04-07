@@ -36,10 +36,9 @@ def getSynonyms(word):
 	return synonyms
 
 def calculateSimilarity(sentence1,sentence2):
-	sentence1_filtered = removeStopWords(sentence1)
 	sentence2_filtered = removeStopWords(sentence2)
 	# similarity_score = lang_data(sentence1).similarity(lang_data(sentence2))
-	similarity_score_f = lang_data(sentence1_filtered).similarity(lang_data(sentence2_filtered))
+	similarity_score_f = lang_data(sentence1).similarity(lang_data(sentence2_filtered))
 	return similarity_score_f #,similarity_score
 
 
@@ -91,7 +90,7 @@ def nlp_test():
 				for syn in list(synonym_dict.values())[i]:
 					generated_sentence = sentence.replace(list(synonym_dict.keys())[i], syn)
 					no_of_generated_sentences = no_of_generated_sentences + 1
-					score = calculateSimilarity(sentence,generated_sentence)
+					score = calculateSimilarity(sentenceFiltered,generated_sentence)
 					all_sentence_score[generated_sentence]=score # dictionary to map sentence to score
 					total_score = total_score + score
 		average = total_score/no_of_generated_sentences
