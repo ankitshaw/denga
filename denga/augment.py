@@ -88,7 +88,7 @@ def nlp(filePath):
 
 def nlp_test():
 	# df = pd.read_csv(filePath,sep='\t',header= None, error_bad_lines=False)  #need to handle different file formats.
-	data = ["one","two"]
+	data = ["number","two"]
 	df= pd.DataFrame(data, columns=['Sentences'])
 	datasetList = df.iloc[:,0].values.tolist() #first column of data frame i.e. all sentences
 
@@ -97,7 +97,6 @@ def nlp_test():
 	total_score = 0
 	all_sentence_score = {}
 	for sentence in datasetList:
-		print(sentence)
 		print("Original Sentence: ", sentence)
 		sentenceFiltered = removeStopWords(sentence)
 		print("filtered sentence: ", sentenceFiltered)
@@ -114,7 +113,6 @@ def nlp_test():
 		print("no of woi: ", len(woi))
 		no_of_words_to_be_replaced = len(woi) #flag to set how many words need to be replaced
 		generated_sentences=[]
-		print("Generated sentence list: ", generated_sentences)
 		if no_of_words_to_be_replaced <=len(woi):
 			for i in range(0,no_of_words_to_be_replaced):
 				for syn in list(synonym_dict.values())[i]:
@@ -130,7 +128,8 @@ def nlp_test():
 		for sentence,score in all_sentence_score.items():
 			if score >=average: #filtering out only sentences with score above average
 				generated_sentences.append(sentence)
-		print(sep="\n",*generated_sentences)
+		all_sentence_score.clear() #flushing out dictionary after sentences generated for each sentence in dataframe
+		print(generated_sentences)
 		# print(dict(sorted(all_sentence_score.items(), key=operator.itemgetter(1), reverse=True)[:5]))
 		# return generated_sentences
 
