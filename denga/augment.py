@@ -2,8 +2,11 @@ import nltk
 import pandas as pd
 from nltk.corpus import stopwords,wordnet
 from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.stem import WordNetLemmatizer
 from nltk.tag import DefaultTagger
+import operator
 import spacy
+
 
 stop_words = set(stopwords.words('english')) #from nltk
 lang_data = spacy.load('en_core_web_lg') #nlp english data model
@@ -35,8 +38,34 @@ def getSynonyms(word):
 			synonyms.append(l.name())
 	return synonyms
 
+#lemmatisation starts here
+def nltk_to_wordnet_tag(nltk_tag):
+    if nltk_tag.startswith('J'):
+        return wordnet.ADJ
+    elif nltk_tag.startswith('V'):
+        return wordnet.VERB
+    elif nltk_tag.startswith('N'):
+        return wordnet.NOUN
+    elif nltk_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return None
+
+lemmatizer = WordNetLemmatizer()
+def lemmatize(sentence):
+    nltk_tagged = getPosTag(sentence)
+    wordnet_tagged = map(lambda x: (x[0], nltk_to_wordnet_tag(x[1])), nltk_tagged)
+    lemmatized_sentence = []
+    for word, tag in wordnet_tagged:
+        if tag is None:
+            lemmatized_sentence.append(word)
+        else:
+            lemmatized_sentence.append(lemmatizer.lemmatize(word, tag))
+    return " ".join(lemmatized_sentence)
+
 def calculateSimilarity(sentence1,sentence2):
-	sentence2_filtered = removeStopWords(sentence2)
+	lemmatized_sentence2 = lemmatizer.lemmatize(sentence2) #pre-processing generated sentence
+	sentence2_filtered = removeStopWords(lemmatized_sentence2)
 	# similarity_score = lang_data(sentence1).similarity(lang_data(sentence2))
 	similarity_score_f = lang_data(sentence1).similarity(lang_data(sentence2_filtered))
 	return similarity_score_f #,similarity_score
@@ -59,7 +88,7 @@ def nlp(filePath):
 
 def nlp_test():
 	# df = pd.read_csv(filePath,sep='\t',header= None, error_bad_lines=False)  #need to handle different file formats.
-	data = ["i want to swim","birds are flying in the sky"] # 'I will work from home today'
+	data = ["I will work from home","birds are flying in the sky"] # 'I will work from home today'
 	df= pd.DataFrame(data, columns=['Sentences'])
 	datasetList = df.iloc[:,0].values.tolist() #first column of data frame i.e. all sentences
 
@@ -98,6 +127,7 @@ def nlp_test():
 			if score >=average: #filtering out only sentences with score above average
 				generated_sentences.append(sentence)
 		print(sep="\n",*generated_sentences)
+		# print(dict(sorted(all_sentence_score.items(), key=operator.itemgetter(1), reverse=True)[:5]))
 		# return generated_sentences
 
 nlp_test()
