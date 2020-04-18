@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="denga",
     version="0.0.1",
-    author="denga",
+    author="ankitshaw",
     author_email="ankit.india14@gmail.com",
     description="Data Augmentation for NLP Dataset using Thesaurus",
     long_description=long_description,
