@@ -2,8 +2,9 @@
 ![](https://github.com/ankitshaw/denga/workflows/Build/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Data Augmentation for NLP Dataset using Thesaurus
+Data Augmentation for NLP Dataset using Thesaurus. 
 
+It is still in work in progress mode and experimental in nature.  
 
 ## Installation
 Package can be installed like any other Python library, using (a recent version of) the Python package manager `pip`, on Linux, macOS, and Windows:
