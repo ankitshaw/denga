@@ -71,11 +71,14 @@ def calculateSimilarity(sentence1,sentence2):
 	return similarity_score_f #,similarity_score
 
 
-def nlp(filePath):
-	df = pd.read_csv(filePath, sep='\t',header= None, error_bad_lines=False)  #need to handle different file formats.
+def nlp(dataset):
+	df = dataset   #need to handle different file formats.
 	# df = pd.DataFrame(data, columns=['Sentences'])
 	datasetList = df.iloc[:,0].values.tolist()
-
+	newDatasetList = []
+	no_of_generated_sentences=0
+	total_score = 0
+	all_sentence_score = {}
 	for sentence in datasetList:
 		sentenceFiltered = removeStopWords(sentence)
 		tag = getPosTag(sentenceFiltered)
@@ -83,8 +86,35 @@ def nlp(filePath):
 		synonym_dict = {}
 		for word in woi:
 			synonyms = getSynonyms(word)
-			synonym_dict[word] = set(synonyms)
-		print(synonym_dict)
+			synonym_dict[word] = list(set(synonyms))
+
+		no_of_words_to_be_replaced = len(woi) #flag to set how many words need to be replaced
+		generated_sentences=[]
+		
+		if no_of_words_to_be_replaced <=len(woi):
+			for i in range(0,no_of_words_to_be_replaced):
+				for syn in list(synonym_dict.values())[i]:
+
+					generated_sentence = sentence.replace(list(synonym_dict.keys())[i], syn)
+					no_of_generated_sentences = no_of_generated_sentences + 1
+					score = calculateSimilarity(sentenceFiltered,generated_sentence)
+					all_sentence_score[generated_sentence]=score # dictionary to map sentence to score
+					total_score = total_score + score
+
+		try:
+			average = total_score/no_of_generated_sentences
+		except Exception as e:
+			average = 0
+		for sentence,score in all_sentence_score.items():
+			if score >=average: #filtering out only sentences with score above average
+				generated_sentences.append(sentence)
+		all_sentence_score.clear() #flushing out dictionary after sentences generated for each sentence in dataframe
+		
+		newDatasetList.extend(generated_sentences)
+
+	return newDatasetList		
+
+		
 
 def nlp_test():
 	# df = pd.read_csv(filePath,sep='\t',header= None, error_bad_lines=False)  #need to handle different file formats.
@@ -133,6 +163,6 @@ def nlp_test():
 		# print(dict(sorted(all_sentence_score.items(), key=operator.itemgetter(1), reverse=True)[:5]))
 		# return generated_sentences
 
-nlp_test()
+#nlp_test()
 
 # https://nlpforhackers.io/wordnet-sentence-similarity/
