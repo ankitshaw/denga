@@ -221,3 +221,9 @@
 # # # #
 # # # # for synset in [dog, feline, mammal]:
 # # # #     print("Similarity(%s, %s) = %s" % (cat, synset, cat.wup_similarity(synset)))
+
+from genda import Genda
+
+gen = Genda("temps.csv")
+gen.generate()
+gen.save()
