@@ -9,7 +9,7 @@ import spacy
 
 
 stop_words = set(stopwords.words('english')) #from nltk
-lang_data = spacy.load('en_core_web_sm') #nlp english data model
+lang_data = spacy.load('en_core_web_lg') #nlp english data model
 
 def removeStopWords(sentence):
 	filtered_sentence = " ".join(filter(lambda word: word not in stop_words, sentence.split()))
