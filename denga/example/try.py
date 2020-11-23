@@ -222,8 +222,15 @@
 # # # # for synset in [dog, feline, mammal]:
 # # # #     print("Similarity(%s, %s) = %s" % (cat, synset, cat.wup_similarity(synset)))
 
-from genda import Genda
+from ..genda import Genda
+import os
 
-gen = Genda("temps.csv")
+gen = Genda(os.path.abspath("denga\\example\\temps.txt"))
 gen.generate()
 gen.save()
+
+'''
+Run this file from main git folder (denga) path as:
+    python -m denga.example.try
+Output 'denga.txt' will be created in the main git folder (denga)
+'''

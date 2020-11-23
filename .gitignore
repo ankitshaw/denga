@@ -2,3 +2,6 @@ dist/
 build/
 denga.egg-info/
 __pycache__/
+venv/
+.idea/
+genda.txt

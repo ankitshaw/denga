@@ -1,12 +1,17 @@
 import nltk
 import pandas as pd
-from nltk.corpus import stopwords,wordnet
+from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.tag import DefaultTagger
 import operator
 import spacy
 
+if not stopwords:
+	nltk.download('stopwords')
+
+if not wordnet:
+	nltk.download('wordnet')
 
 stop_words = set(stopwords.words('english')) #from nltk
 lang_data = spacy.load('en_core_web_lg') #nlp english data model
