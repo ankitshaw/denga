@@ -7,11 +7,10 @@ from nltk.tag import DefaultTagger
 import operator
 import spacy
 
-if not stopwords:
-	nltk.download('stopwords')
-
-if not wordnet:
-	nltk.download('wordnet')
+# nltk.download('stopwords')
+# nltk.download('wordnet')
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
 
 stop_words = set(stopwords.words('english')) #from nltk
 lang_data = spacy.load('en_core_web_lg') #nlp english data model
@@ -73,8 +72,39 @@ def calculateSimilarity(sentence1,sentence2):
 	sentence2_filtered = removeStopWords(lemmatized_sentence2)
 	# similarity_score = lang_data(sentence1).similarity(lang_data(sentence2))
 	similarity_score_f = lang_data(sentence1).similarity(lang_data(sentence2_filtered))
-	return similarity_score_f #,similarity_score
 
+	context_score = checkContext(sentence1, sentence2)
+	return (context_score + similarity_score_f)/2 #,similarity_score
+
+def checkContext(sentence1, sentence2):    
+	txt1 = getPosTag(sentence1)
+	txt2 = getPosTag(sentence2)
+
+	synset1 = list(filter(None, [taggedToSynset(*tagged_word) for tagged_word in txt1]))
+	synset2 = list(filter(None, [taggedToSynset(*tagged_word) for tagged_word in txt2]))
+
+	score, count = 0.0, 0
+	for synset in synset1:
+		lst = list(filter(None, [synset.path_similarity(ss) for ss in synset2]))
+
+		if lst and max(lst):
+			score += max(lst)
+			count += 1
+
+	if count>0:
+		score /= count
+		
+	return score
+
+def taggedToSynset(word, tag):
+	wn_tag = nltk_to_wordnet_tag(tag)
+	if wn_tag is None:
+		return None
+  
+	try:
+		return wordnet.synsets(word, wn_tag)[0]
+	except:
+		return None
 
 def nlp(dataset):
 	df = dataset   #need to handle different file formats.
