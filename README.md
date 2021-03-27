@@ -6,7 +6,7 @@ Data Augmentation for NLP Dataset using Thesaurus.
 
 It is still in work in progress mode and experimental in nature.
 
-⛔ [NOT MAINTAINED] This repository is no longer maintained
+⛔ [NOT MAINTAINED] This repository is no longer maintained.
 
 ## Installation
 Package can be installed like any other Python library, using (a recent version of) the Python package manager `pip`, on Linux, macOS, and Windows:
